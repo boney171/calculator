@@ -1,5 +1,5 @@
-`import {Stack} from '../Stack.js';`
-class TreeNode{
+    `import {Stack} from "./Stack.js";`
+    class TreeNode{
     constructor(data,key){
         this.data = data;
         this.key = key;
@@ -8,7 +8,7 @@ class TreeNode{
     }
 }
 
-class arithmeticExpression{
+  class arithmeticExpression{
     constructor(expression){
         this.infixExpression = expression;
         this.root = null;
@@ -22,7 +22,7 @@ class arithmeticExpression{
         else if( op == '^'){
             priority = 3;
         }
-        else if ( op == '*' || op == '/'){
+        else if ( op == '*' || op == '/'|| '%'){
             priority = 2;
         }
         else if( op == '+' || op == '-'){
@@ -41,7 +41,7 @@ class arithmeticExpression{
                 continue;
             }
             if( c == '+' || c == '-' || c == '*' || c == '/' 
-            || c == '(' || c == ')' || c == '^'){
+            || c == '(' || c == ')' || c == '^' || c == "%"){
                 if( c == '('){
                     s.push(c);
                 }else if( c == ')'){
@@ -80,7 +80,7 @@ class arithmeticExpression{
         let postFix = this.infix_to_postfix();
         for(let i = 0; i < postFix.length; i++){
             numb = postFix[i];
-            if(numb == '*' || numb == '-' || numb == '+' || numb == '/' || numb == '^'){
+            if(numb == '*' || numb == '-' || numb == '+' || numb == '/' || numb == '^' || numb == '%'){
                 const newRoot = new TreeNode(numb, letter + i);
                 newRoot.right = s.peek();
                 s.pop();
@@ -132,10 +132,16 @@ class arithmeticExpression{
         }
         return;
      }
-    
-};
 
-let test = new arithmeticExpression('3^2+5-9');
-let postfix = test.infix_to_postfix();
-test.buildTree();
-test.postfix(test.root);
+     evaluate(root){
+        if(!root) return 0;
+        if(!root.left && !root.right) return parseInt(root.data);
+        if(root.data == '+') return this.evaluate(root.left) + this.evaluate(root.right);
+        if(root.data == '-') return this.evaluate(root.left) - this.evaluate(root.right);
+        if(root.data == '*') return this.evaluate(root.left) * this.evaluate(root.right);
+        if(root.data == '/') return this.evaluate(root.left) / this.evaluate(root.right);
+        if(root.data == '%') return this.evaluate(root.left) % this.evaluate(root.right);
+        if(root.data == '^') return Math.pow(this.evaluate(root.left),this.evaluate(root.right));
+     }
+     
+};
